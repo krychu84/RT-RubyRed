@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+  :root {
+    --ruby: #b0123b; --ruby-dark: #7d0c2a; --ku: #901a1e;
+    --ink: #1d1d1f; --muted: #6b6b70; --line: #e4e1e1; --bg: #faf8f8; --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         color: var(--ink); background: var(--bg); }
+  header { background: var(--card); border-bottom: 3px solid var(--ruby);
+           display: flex; align-items: center; justify-content: space-between;
+           gap: 24px; padding: 14px 28px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand svg { height: 64px; width: auto; }
+  .brand h1 { margin: 0; font-size: 24px; letter-spacing: .5px; }
+  .brand h1 span { color: var(--ruby); }
+  .brand .sub { color: var(--muted); font-size: 13px; }
+  .ku { display: flex; align-items: center; gap: 12px; text-align: right; }
+  .ku svg { height: 60px; width: 60px; }
+  .ku .uni { font-family: Georgia, "Times New Roman", serif; letter-spacing: 2.5px;
+             font-size: 12px; color: var(--ku); }
+  .ku .who { color: var(--muted); font-size: 12.5px; }
+  main { max-width: 1400px; margin: 0 auto; padding: 20px 28px 40px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+  .tile .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .6px; }
+  .tile .v { font-size: 22px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .paths { color: var(--muted); font-size: 12px; margin: 10px 2px 0; word-break: break-all; }
+  .paths code { color: var(--ink); }
+  .controls { position: sticky; top: 0; z-index: 5; background: var(--card);
+              border: 1px solid var(--line); border-radius: 8px; margin: 18px 0;
+              padding: 12px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+              box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+  .ctl label { font-weight: 600; display: block; margin-bottom: 4px; }
+  .ctl .row { display: flex; align-items: center; gap: 12px; }
+  .ctl input[type=range] { flex: 1; accent-color: var(--ruby); }
+  .ctl input[type=number] { width: 110px; padding: 4px 6px; border: 1px solid var(--line);
+                            border-radius: 5px; font: inherit; }
+  .ctl .hint { color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+          padding: 14px 16px 6px; margin-bottom: 18px; }
+  .card h2 { font-size: 16px; margin: 0 0 2px; }
+  .card p { margin: 0 0 6px; color: var(--muted); font-size: 12.5px; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+  @media (max-width: 800px) { .controls { grid-template-columns: 1fr; } header, main { padding-left: 16px; padding-right: 16px; } }
+</style>
+<script>/*__PLOTLY__*/</script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <!--__RUBYRED_LOGO__-->
+    <div>
+      <h1>RT-<span>RubyRed</span></h1>
+      <div class="sub" id="runline"></div>
+    </div>
+  </div>
+  <div class="ku">
+    <div>
+      <div class="uni">UNIVERSITY OF COPENHAGEN</div>
+      <div class="who">Lukasz Krych</div>
+    </div>
+    <!--__KU_LOGO__-->
+  </div>
+</header>
+
+<main>
+  <div class="tiles" id="tiles"></div>
+  <div class="paths" id="paths"></div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label for="abR">Minimum relative abundance (%)</label>
+      <div class="row">
+        <input type="range" id="abR" min="0" max="10" step="0.01" value="1">
+        <input type="number" id="abN" min="0" max="100" step="0.01" value="1">
+      </div>
+      <div class="hint" id="abHint"></div>
+    </div>
+    <div class="ctl">
+      <label for="rdR">Minimum classified reads per sample</label>
+      <div class="row">
+        <input type="range" id="rdR" min="0" max="1000" step="1" value="0">
+        <input type="number" id="rdN" min="0" step="1" value="0">
+      </div>
+      <div class="hint" id="rdHint"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Raw reads per BRK barcode</h2>
+    <p>Reads assigned by torchlex to each inner barcode, stacked by batch. Diamonds show classified reads in the feature table. Faded bars are samples below the read threshold.</p>
+    <div id="rawPlot"></div>
+  </div>
+  <div class="card">
+    <h2>Relative abundance, species level</h2>
+    <p>Taxa below the abundance threshold in every shown sample are grouped as “Other”. Taxa not resolved to species are shown at their lowest classified rank.</p>
+    <div id="barPlot"></div>
+  </div>
+  <div class="card">
+    <h2>Rarefaction curves</h2>
+    <p>Expected number of taxa at each sequencing depth, computed analytically without random subsampling. Taxa below the abundance threshold are left out.</p>
+    <div id="rarePlot"></div>
+  </div>
+</main>
+<footer>RT-RubyRed · RubyRed pipeline (QIIME 2, torchlex) · Lukasz Krych, University of Copenhagen · report generated <span id="gen"></span></footer>
+
+<script>
+const D = /*__DATA__*/null;
+const PALETTE = ["#b0123b","#1f77b4","#ff7f0e","#2ca02c","#9467bd","#8c564b","#e377c2","#17becf",
+  "#bcbd22","#393b79","#e7ba52","#637939","#d6616b","#6baed6","#fd8d3c","#74c476","#9e9ac8",
+  "#843c39","#de9ed6","#3182bd","#e6550d","#31a354","#756bb1","#636363","#8c6d31","#7b4173",
+  "#a55194","#cedb9c","#ad494a","#9ecae1","#fdae6b","#a1d99b","#bcbddc","#e7969c","#c49c94","#f7b6d2"];
+const OTHER = "#c8c4c4";
+const fmt = n => n.toLocaleString("en-US");
+const S = D.samples, T = D.taxa, M = D.counts;           // M[taxon][sample]
+const colTot = S.map((_, j) => M.reduce((a, r) => a + r[j], 0));
+const rawTot = S.map(s => Object.values(D.raw[s] || {}).reduce((a, b) => a + b, 0));
+// stable colour per taxon, by overall abundance
+const order = T.map((_, i) => i).sort((a, b) =>
+  M[b].reduce((x, y) => x + y, 0) - M[a].reduce((x, y) => x + y, 0));
+const colour = {}; order.forEach((i, k) => colour[i] = PALETTE[k % PALETTE.length]);
+
+document.getElementById("runline").textContent = `${D.meta.run} · ${D.meta.dir}`;
+document.getElementById("gen").textContent = D.meta.updated;
+document.getElementById("paths").innerHTML =
+  `Input <code>${esc(D.meta.watch)}</code> &nbsp;·&nbsp; Output <code>${esc(D.meta.out)}</code> &nbsp;·&nbsp; started ${esc(D.meta.started)}`;
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const tiles = [["Batches", D.batches.length], ["Input files", fmt(D.meta.files)],
+  ["Samples (BRK)", S.length], ["Raw reads", fmt(D.meta.raw_total)],
+  ["Classified reads", fmt(colTot.reduce((a, b) => a + b, 0))], ["Taxa", T.length],
+  ["Last update", D.meta.updated.slice(5)]];
+document.getElementById("tiles").innerHTML = tiles.map(([k, v]) =>
+  `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+
+// controls: slider and number box stay in sync
+const maxRead = Math.max(1, ...colTot);
+const rdR = document.getElementById("rdR"); rdR.max = maxRead;
+rdR.step = Math.max(1, Math.round(maxRead / 1000));
+function link(r, n, clampMax) {
+  r.addEventListener("input", () => { n.value = r.value; schedule(); });
+  n.addEventListener("input", () => {
+    let v = parseFloat(n.value); if (isNaN(v)) return;
+    if (v > parseFloat(r.max) && !clampMax) r.max = v;
+    r.value = v; schedule();
+  });
+}
+link(document.getElementById("abR"), document.getElementById("abN"), false);
+link(rdR, document.getElementById("rdN"), true);
+let pending = null;
+function schedule() { if (!pending) pending = requestAnimationFrame(() => { pending = null; update(); }); }
+
+const cfg = {displaylogo: false, responsive: true,
+  toImageButtonOptions: {format: "svg", filename: `RT-RubyRed_${D.meta.run}_${D.meta.dir}`}};
+const baseLayout = {margin: {l: 60, r: 20, t: 10, b: 70}, font: {size: 12},
+  paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+  xaxis: {tickangle: -60, automargin: true}, yaxis: {gridcolor: "#eee", automargin: true}};
+
+// ---- rarefaction (Hurlbert expected richness)
+function lgamma(x) {
+  const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313,
+    -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgamma(1 - x);
+  x -= 1; let a = c[0]; const t = x + g + 0.5;
+  for (let i = 1; i < g + 2; i++) a += c[i] / (x + i);
+  return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+}
+const lnC = (n, k) => lgamma(n + 1) - lgamma(k + 1) - lgamma(n - k + 1);
+function rarefy(counts) {
+  const c = counts.filter(x => x > 0), N = c.reduce((a, b) => a + b, 0);
+  if (!N) return {x: [], y: []};
+  const steps = Math.min(40, N), xs = [], ys = [];
+  for (let s = 0; s <= steps; s++) {
+    const n = Math.round(N * s / steps); let e = 0;
+    const base = lnC(N, n);
+    for (const ni of c) e += (N - ni < n) ? 1 : 1 - Math.exp(lnC(N - ni, n) - base);
+    xs.push(n); ys.push(e);
+  }
+  return {x: xs, y: ys};
+}
+
+function update() {
+  const thr = parseFloat(document.getElementById("abN").value) || 0;
+  const minR = parseFloat(document.getElementById("rdN").value) || 0;
+  const keepS = S.map((_, j) => colTot[j] > 0 && colTot[j] >= minR);
+  const sIdx = S.map((_, j) => j).filter(j => keepS[j]);
+  // relative abundance per kept sample
+  const rel = M.map(r => sIdx.map(j => 100 * r[j] / colTot[j]));
+  const keepT = rel.map(r => r.length > 0 && Math.max(...r) >= thr);
+  const shownT = order.filter(i => keepT[i]);
+  document.getElementById("abHint").textContent =
+    `${shownT.length} of ${T.length} taxa shown · ${T.length - shownT.length} grouped as Other`;
+  document.getElementById("rdHint").textContent =
+    `${sIdx.length} of ${S.length} samples shown`;
+
+  // 1. raw reads
+  const rawTraces = D.batches.map((b, k) => ({
+    type: "bar", name: b, x: S, y: S.map(s => (D.raw[s] || {})[b] || 0),
+    marker: {color: `hsl(345, 75%, ${Math.round(28 + 50 * k / Math.max(1, D.batches.length))}%)`,
+             opacity: S.map((_, j) => keepS[j] ? 1 : 0.22)},
+    hovertemplate: `%{x} · ${b}: %{y:,} reads<extra></extra>`}));
+  rawTraces.push({type: "scatter", mode: "markers", name: "classified", x: S, y: colTot,
+    marker: {symbol: "diamond", size: 7, color: "#1d1d1f"},
+    hovertemplate: "%{x} classified: %{y:,}<extra></extra>"});
+  Plotly.react("rawPlot", rawTraces, {...baseLayout, height: 380, barmode: "stack",
+    legend: {orientation: "h", y: 1.12}, yaxis: {...baseLayout.yaxis, title: "reads"}}, cfg);
+
+  // 2. species barplot
+  const xs = sIdx.map(j => S[j]);
+  const bars = shownT.map(i => ({type: "bar", name: T[i], x: xs, y: sIdx.map(j => 100 * M[i][j] / colTot[j]),
+    marker: {color: colour[i]}, customdata: sIdx.map(j => M[i][j]),
+    hovertemplate: `<b>${esc(T[i])}</b><br>%{x}: %{y:.2f}% (%{customdata:,} reads)<extra></extra>`}));
+  const other = sIdx.map(j => T.reduce((a, _, i) => keepT[i] ? a : a + 100 * M[i][j] / colTot[j], 0));
+  if (other.some(v => v > 0))
+    bars.push({type: "bar", name: `Other (< ${thr}%)`, x: xs, y: other, marker: {color: OTHER},
+      hovertemplate: "Other: %{y:.2f}%<extra></extra>"});
+  Plotly.react("barPlot", bars, {...baseLayout, height: 600, barmode: "stack", bargap: 0.15,
+    yaxis: {...baseLayout.yaxis, title: "relative abundance (%)", range: [0, 100]},
+    legend: {font: {size: 11}, traceorder: "normal"}}, cfg);
+
+  // 3. rarefaction
+  const lines = sIdx.map((j, k) => {
+    const r = rarefy(M.map((row, i) => keepT[i] ? row[j] : 0));
+    return {type: "scatter", mode: "lines", name: S[j], x: r.x, y: r.y,
+      line: {width: 1.6, color: PALETTE[k % PALETTE.length]},
+      hovertemplate: `${S[j]}<br>%{x:,} reads → %{y:.1f} taxa<extra></extra>`};
+  });
+  Plotly.react("rarePlot", lines, {...baseLayout, height: 480,
+    margin: {...baseLayout.margin, b: 50},
+    xaxis: {title: "reads sampled", gridcolor: "#eee"}, yaxis: {...baseLayout.yaxis, title: "observed taxa"},
+    legend: {font: {size: 11}}}, cfg);
+}
+update();
+</script>
+</body>
+</html>

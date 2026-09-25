@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use RT-RubyRed, please cite it as below, together with RubyRed, QIIME 2 and the MIMt database."
+title: "RT-RubyRed: real-time rRNA amplicon classification for Oxford Nanopore sequencing runs"
+version: 1.0.0
+date-released: 2026-09-25
+license: MIT
+repository-code: "https://github.com/krychu84/RT-RubyRed"
+authors:
+  - family-names: Krych
+    given-names: Lukasz
+    email: krych@life.ku.dk
+    affiliation: "Department of Food Science, University of Copenhagen"

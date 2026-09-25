@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.qza
+*.qzv
+*.fastq
+*.fastq.gz
+*.fasta.gz
+.DS_Store
