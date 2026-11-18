@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use RT-RubyRed, please cite it as below, together with RubyRed (reillyeo/RubyRed) and the protocol paper listed under references."
 title: "RT-RubyRed: real-time rRNA amplicon classification for Oxford Nanopore sequencing runs"
-version: 1.1.0
+version: 1.1.1
 date-released: 2026-11-18
 license: MIT
 repository-code: "https://github.com/krychu84/RT-RubyRed"

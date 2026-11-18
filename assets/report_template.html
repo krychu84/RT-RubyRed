@@ -652,7 +652,7 @@ ${primers.map(([n, sq]) => `<tr><td>UMI_${n}</td><td><code>${tail}${umi}${sq}</c
   // data analysis (run-specific)
   const seqBits = [];
   if (Q.device) seqBits.push(`on a ${esc(Q.device.replace(/_/g, " "))}${Q.device_id ? " (" + esc(Q.device_id) + ")" : ""}`);
-  if (Q.flow_cell || Q.flow_cell_id) seqBits.push(`flow cell ${esc([Q.flow_cell, Q.flow_cell_id].filter(Boolean).join(", "))}`);
+  if (Q.flow_cell || Q.flow_cell_id) seqBits.push(`${seqBits.length ? "" : "on "}flow cell ${esc([Q.flow_cell, Q.flow_cell_id].filter(Boolean).join(", "))}`);
   const sw = [Q.minknow ? "MinKNOW v" + Q.minknow : "MinKNOW", Q.dorado ? "Dorado v" + Q.dorado : "Dorado"].join(" with ");
   const trim = R.primer_trim
     ? `primer-bounded amplicons were extracted with cutadapt${v("cutadapt")} (Martin, 2011) using a linked adapter (forward ${esc(R.fwd_primer || "")}, reverse ${esc(R.rev_primer || "")} as found at the 3′ end of reads; maximum error rate ${esc(R.primer_err || "")}; reverse-complemented reads re-oriented; untrimmed reads discarded) and amplicons of ${esc(R.len_min)}–${esc(R.len_max)} bp were kept; `
