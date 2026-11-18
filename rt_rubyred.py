@@ -27,8 +27,12 @@ TOOL_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, TOOL_DIR)
 import report  # noqa: E402
 
-VERSION = "1.0.0"
-DEFAULT_CLASSIFIER = "{rr_home}/resources/classifiers/MIMt_16s_311025_species"
+VERSION = "1.1.0"
+# Default: the database that ships with RubyRed itself (resources/classifiers, via Git LFS),
+# i.e. whatever RubyRed's own script points to. --classifier DIR overrides it.
+DEFAULT_CLASSIFIER = "default"
+LFS_HINT = ("cd $RUBYRED_HOME && git lfs install && git lfs pull   "
+            "(git-lfs: conda install -n qiime2 -c conda-forge git-lfs), or run RT-RubyRed's install.sh")
 HOME = os.path.expanduser("~")
 
 # ---------------------------------------------------------------- terminal
@@ -186,6 +190,7 @@ class Run:
             with open(self.index, "w") as fh:
                 fh.write("file\tsize_bytes\tmtime\tbatch\tadded\n")
         self.stats = self.load_stats()
+        self.pipeline = pipeline_info(args)
         self.save_meta()
 
     # ---- persistence
@@ -202,7 +207,8 @@ class Run:
     def save_meta(self):
         meta = {"tool": "RT-RubyRed", "version": VERSION, "watch_dir": self.watch,
                 "run_name": self.run_name, "dir_name": self.dir_name, "date": self.date,
-                "output_dir": self.out, "started": self.load_meta().get("started", now())}
+                "output_dir": self.out, "started": self.load_meta().get("started", now()),
+                "pipeline": getattr(self, "pipeline", {})}
         with open(self.meta_path(), "w") as fh:
             json.dump(meta, fh, indent=2)
         return meta
@@ -394,7 +400,8 @@ def process_batch(run, res, files):
         say(f"   RubyRed classification ({res.threads} threads)…", "grey")
         cmd = ["bash", run.args.rubyred, "-i", stage, "-d", "-o", rr_out,
                "-p", str(res.threads), "-m", "1", "-t", str(run.args.subsample),
-               "-f", "1", *classifier_args(run.args), *run.args.rubyred_args.split()]
+               "-f", "1", "-w", os.path.join(os.path.dirname(os.path.realpath(run.args.rubyred)), "resources"),
+               *classifier_args(run.args), *run.args.rubyred_args.split()]
         rc = run_child(cmd, blog, res, "RubyRed")
         shutil.rmtree(stage, ignore_errors=True)
         shutil.rmtree(os.path.join(rr_out, "demux_data"), ignore_errors=True)
@@ -466,6 +473,105 @@ def merge_rep_seqs(run, rr_out, batch):
     return n
 
 
+def _cmd_version(cmd, pattern=r"v?(\d+\.\d+(?:\.\d+)?)"):
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    m = re.search(pattern, (r.stdout or "") + (r.stderr or ""))
+    return m.group(1) if m else ""
+
+
+def _pkg_version(*names):
+    from importlib import metadata
+    for n in names:
+        try:
+            return metadata.version(n)
+        except metadata.PackageNotFoundError:
+            continue
+    return ""
+
+
+def pipeline_info(args):
+    """Tools, versions and RubyRed settings used for this run (for the report's Methods)."""
+    try:
+        with open(args.rubyred) as fh:
+            src = fh.read()
+    except OSError:
+        src = ""
+
+    def var(name):
+        m = re.search(rf'^{name}="?([^"\s#]+)"?', src, re.M)
+        return m.group(1) if m else ""
+
+    rr = {"quality": var("qfilt"), "len_min": var("len_min"), "len_max": var("len_max"),
+          "fwd_primer": var("fwd_primer"), "rev_primer": var("rev_primer"),
+          "primer_err": var("primer_err"), "method": var("classification_method") or "sklearn",
+          "primer_trim": bool(re.search(r"cutadapt -g", src))}
+    m = re.search(r"--p-confidence\s+([\d.]+)", src)
+    rr["confidence"] = m.group(1) if m else ""
+    toks = args.rubyred_args.split()          # options passed on with --rubyred-args win
+    flags = {"-q": "quality", "-l": "len_min", "-x": "len_max", "-F": "fwd_primer", "-R": "rev_primer"}
+    for i, t in enumerate(toks[:-1]):
+        if t in flags:
+            rr[flags[t]] = toks[i + 1]
+    rr["subsample"] = args.subsample
+    rr["min_freq"] = 1
+    try:
+        g = subprocess.run(["git", "-C", os.path.dirname(os.path.realpath(args.rubyred)), "log", "-1",
+                            "--format=%h %cs"], capture_output=True, text=True, timeout=20).stdout.split()
+        rr["commit"], rr["commit_date"] = (g + ["", ""])[:2]
+    except (OSError, subprocess.SubprocessError):
+        pass
+    clf = classifier_args(args)
+    versions = {
+        "torchlex": _pkg_version("torchlex") or _cmd_version([args.torchlex, "--version"]),
+        "cutadapt": _cmd_version(["cutadapt", "--version"]),
+        "chopper": _cmd_version(["chopper", "--version"]),
+        "vsearch": _cmd_version(["vsearch", "--version"], r"vsearch v(\d+\.\d+\.\d+)"),
+        "seqkit": _cmd_version(["seqkit", "version"]),
+        "qiime2": _pkg_version("qiime2"),
+        "q2_feature_classifier": _pkg_version("q2-feature-classifier"),
+        "rescript": _pkg_version("rescript"),
+        "q2_vsearch": _pkg_version("q2-vsearch"),
+        "scikit_learn": _pkg_version("scikit-learn"),
+    }
+    return {"rt_rubyred": VERSION, "rubyred": rr,
+            "classifier": os.path.basename(os.path.dirname(clf[1] if clf else var("classifier"))) or "RubyRed default",
+            "versions": {k: v for k, v in versions.items() if v}}
+
+
+def rubyred_database(rubyred):
+    """Reference files RubyRed uses by default: {'classifier': path, 'reference_seqs': ..., ...}."""
+    try:
+        with open(rubyred) as fh:
+            src = fh.read()
+    except OSError:
+        return {}
+    res = os.path.join(os.path.dirname(os.path.realpath(rubyred)), "resources")
+    out = {}
+    for key in ("classifier", "reference_seqs", "reference_taxonomy"):
+        m = re.search(rf'^{key}="([^"]+)"', src, re.M)
+        if m:
+            out[key] = m.group(1).replace("$resource_dir", res).replace("${resource_dir}", res)
+    return out
+
+
+def lfs_problems(paths):
+    """Files that are missing or are Git LFS pointer stubs instead of the real .qza."""
+    bad = []
+    for p in paths:
+        try:
+            if os.path.getsize(p) < 2048:
+                with open(p, "rb") as fh:
+                    head = fh.read(64)
+                bad.append(f"{p} (Git LFS pointer, not the real file)" if head.startswith(b"version https://git-lfs")
+                           else f"{p} (too small)")
+        except OSError:
+            bad.append(f"{p} (missing)")
+    return bad
+
+
 def classifier_args(args):
     """RubyRed -c/-r/-y for the chosen classifier folder (<dir>/<name>_classifier.qza ...)."""
     if args.classifier in ("", "default", "original"):
@@ -512,7 +618,8 @@ def merge_and_report(run, min_batches=2):
         f"({merged.shape[0]} taxa × {merged.shape[1]} samples, "
         f"{int(merged.values.sum()):,} reads)", "grey")
     try:
-        report.build(run.report, merged, run.stats, run.save_meta(), TOOL_DIR)
+        report.build(run.report, merged, run.stats, run.save_meta(), TOOL_DIR,
+                     batch_tables=tables)
         say(f"   report updated → {os.path.basename(run.report)}", "grey")
     except Exception as exc:  # the report must never stop the analysis
         say(f"   report generation failed: {exc}", "red")
@@ -586,9 +693,9 @@ def parse_args(argv=None):
     p.add_argument("--mem-frac", type=float, default=0.5, help="share of RAM to allow (0.5)")
     p.add_argument("--subsample", type=int, default=1000000000,
                    help="RubyRed -t per batch (default: no subsampling)")
-    p.add_argument("--classifier", default=DEFAULT_CLASSIFIER.format(rr_home=rr_home),
-                   help="classifier folder (default: MIMt_16s_311025_species, strains pooled "
-                        "per species); 'original' = RubyRed's own default")
+    p.add_argument("--classifier", default=DEFAULT_CLASSIFIER,
+                   help="classifier folder <dir>/<name>_{classifier,seqs,tax}.qza (default: the "
+                        "database distributed with RubyRed, e.g. MIMt_16s_311025_species_amp341F1390R)")
     p.add_argument("--rubyred", default=os.path.join(rr_home, "RubyRed"),
                    help="RubyRed script (default: $RUBYRED_HOME/RubyRed, "
                         "RUBYRED_HOME defaults to ~/my_scripts/RubyRed)")
@@ -612,12 +719,13 @@ def main(argv=None):
             sys.exit(f"{C['red']}'{tool}' not on PATH - activate the qiime2 env "
                      f"(the RT-RubyRed launcher does this).{C['off']}")
     if args.classifier not in ("", "default", "original") and not classifier_args(args):
-        if args.classifier.endswith("/MIMt_16s_311025_species"):  # default not installed
-            print(f"{C['yellow']}Species classifier not found ({args.classifier}); using RubyRed's "
-                  f"default. See database/README.md to install it.{C['off']}")
-            args.classifier = "original"
-        else:
-            sys.exit(f"{C['red']}Classifier not found: {args.classifier}{C['off']}")
+        sys.exit(f"{C['red']}Classifier not found: {args.classifier}{C['off']}")
+    clf = classifier_args(args)
+    db_files = clf[1::2] if clf else list(rubyred_database(args.rubyred).values())
+    bad = lfs_problems(db_files) if db_files else [f"no default database found in {args.rubyred}"]
+    if bad:
+        sys.exit(f"{C['red']}RubyRed database not usable:\n  " + "\n  ".join(bad) +
+                 f"\nFetch it with: {LFS_HINT}{C['off']}")
     res = Resources(args.cpu_frac, args.mem_frac)
     run = Run(args)
     LOG_FH = open(os.path.join(run.out, "RT-RubyRed.log"), "a")
@@ -636,7 +744,9 @@ def main(argv=None):
           f"{'(cgroup enforced)' if res.scope_ok else '(NOT enforced: systemd-run unavailable)'}"
           f", nice 10 / ionice idle-ish")
     clf = classifier_args(args)
-    print(f"{k}  Classifier{o}   {os.path.basename(clf[1]) if clf else 'RubyRed default'}")
+    db_name = os.path.basename(clf[1]) if clf else os.path.basename(
+        rubyred_database(args.rubyred).get("classifier", "RubyRed default"))
+    print(f"{k}  Classifier{o}   {db_name}{'' if clf else '  (RubyRed database)'}")
     print(f"{k}  Tasks{o}        every {args.poll}s: find new *.fastq.gz → torchlex demux → "
           f"fastq_demultiplexed/batchNN → RubyRed → feature_table_batchNN.tsv")
     print(f"               ≥2 batches: merge tables → {os.path.basename(run.merged)} + HTML report")

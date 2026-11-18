@@ -47,6 +47,70 @@
   .card h2 { font-size: 16px; margin: 0 0 2px; }
   .card p { margin: 0 0 6px; color: var(--muted); font-size: 12.5px; }
   footer { color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 2px 0; }
+  .btn { font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px;
+         background: var(--card); color: var(--ink); cursor: pointer; }
+  .btn:hover { border-color: var(--ruby); color: var(--ruby); }
+  .btn.primary { background: var(--ruby); border-color: var(--ruby); color: #fff; }
+  .btn.primary:hover { background: var(--ruby-dark); color: #fff; }
+  .card h3 { font-size: 13.5px; margin: 8px 0 2px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 12px; color: var(--muted); margin: 4px 0 6px; }
+  .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+  #plates { display: block; width: 100%; height: auto; margin: 0 auto 12px; }
+  .tip { position: fixed; z-index: 30; pointer-events: none; display: none; max-width: 340px;
+         background: #1d1d1f; color: #fff; font-size: 12px; line-height: 1.4; padding: 7px 10px; border-radius: 6px;
+         box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+  .tip .ok { color: #7fe39a; } .tip .low { color: #ff9b94; }
+  .dl { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 12px; }
+  .print-only { display: none; }
+  .fate .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 2px 0 8px; }
+  .fate .big { font-size: 22px; font-weight: 650; color: var(--ruby); font-variant-numeric: tabular-nums; }
+  .fatebar { display: flex; height: 38px; border-radius: 7px; overflow: hidden; background: #eee; }
+  .fatebar div { display: flex; align-items: center; justify-content: center; min-width: 0; overflow: hidden;
+                 color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .fatebar div + div { box-shadow: inset 1px 0 0 rgba(255,255,255,.7); }
+  .fatescale { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin: 3px 1px 8px; }
+  .fateleg { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 3px 18px; font-size: 12.5px; margin-bottom: 8px; }
+  .fateleg div { display: flex; align-items: baseline; gap: 6px; }
+  .fateleg i { flex: none; display: inline-block; width: 11px; height: 11px; border-radius: 2px; transform: translateY(1px); }
+  .fateleg .n { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+  .methods h3 { font-size: 14px; margin: 14px 0 4px; display: flex; align-items: center; gap: 10px; }
+  .methods .text { font-size: 13px; line-height: 1.55; color: var(--ink); }
+  .methods .text p { color: var(--ink); font-size: 13px; margin: 0 0 8px; }
+  .methods .text h4 { font-size: 13px; margin: 10px 0 3px; }
+  .methods .text ol { margin: 0 0 6px; padding-left: 22px; } .methods .text li { margin: 2px 0; }
+  .methods table { border-collapse: collapse; font-size: 12px; margin: 4px 0 8px; }
+  .methods td, .methods th { border: 1px solid var(--line); padding: 3px 7px; text-align: left; vertical-align: top; }
+  .methods code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; word-break: break-all; }
+  .methods .cite { background: #fbf3f5; border-left: 3px solid var(--ruby); padding: 7px 10px; border-radius: 4px; margin: 6px 0 4px; font-size: 12.5px; }
+  .methods .refs p { font-size: 12px; color: var(--muted); margin: 0 0 4px; padding-left: 18px; text-indent: -18px; }
+  .copy { font-size: 12px; padding: 3px 10px; }
+  .copy.done { border-color: #2f9e55; color: #2f9e55; }
+  @media print {
+    @page { size: A4 portrait; margin: 11mm 10mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: #fff; font-size: 11px; }
+    header { padding: 0 0 6px; gap: 8px; flex-wrap: nowrap; }
+    .brand svg { height: 44px; } .ku svg { height: 42px; width: 42px; } .brand h1 { font-size: 19px; }
+    main { max-width: none; padding: 8px 0 0; }
+    .no-print, .controls, .modebar-container, .tip { display: none !important; }
+    .print-only { display: block; }
+    .tiles { grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .tile { padding: 5px 7px; } .tile .k { font-size: 9px; } .tile .v { font-size: 14px; }
+    .paths { font-size: 9.5px; }
+    .filters { border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; margin: 8px 0 10px; font-size: 11px; }
+    .card { break-inside: avoid; page-break-inside: avoid; border-color: #d8d4d4; padding: 8px 10px 2px; margin-bottom: 10px; }
+    .card.break, .methods { break-before: page; page-break-before: always; }
+    .methods { break-inside: auto; page-break-inside: auto; }
+    .methods .text, .methods .text p, .methods table { font-size: 10px; }
+    .fatebar { height: 26px; } .fatebar div { font-size: 10px; } .fateleg { font-size: 10px; grid-template-columns: 1fr 1fr; }
+    #plates { width: 100% !important; max-width: none !important; }
+    footer { padding: 4px; font-size: 9.5px; }
+    .ku .uni { white-space: nowrap; letter-spacing: 1.5px; } .brand .sub { white-space: nowrap; }
+    .plegend { column-count: 3; column-gap: 14px; font-size: 8.5px; line-height: 1.35; margin: 2px 0 8px; }
+    .plegend span { display: block; break-inside: avoid; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .plegend i { display: inline-block; width: 8px; height: 8px; margin-right: 4px; vertical-align: -0.5px; }
+  }
   @media (max-width: 800px) { .controls { grid-template-columns: 1fr; } header, main { padding-left: 16px; padding-right: 16px; } }
 </style>
 <script>/*__PLOTLY__*/</script>
@@ -72,6 +136,19 @@
 <main>
   <div class="tiles" id="tiles"></div>
   <div class="paths" id="paths"></div>
+  <div class="card fate" id="fateCard" style="margin-top:14px">
+    <h2>Raw reads vs classified reads, whole run</h2>
+    <div class="head"><span class="big" id="fatePct"></span><span id="fateHead"></span></div>
+    <div class="fatebar" id="fateBar"></div>
+    <div class="fatescale"><span>0</span><span id="fateMax"></span></div>
+    <div class="fateleg" id="fateLeg"></div>
+    <p id="fateNote"></p>
+  </div>
+  <div class="actions no-print">
+    <button class="btn primary" id="printBtn" title="Print or save as PDF, A4 portrait">Print report (A4)</button>
+    <button class="btn" data-dl="zip" title="Merged, relative, filtered and per-batch feature tables plus the sample/well summary">Download all feature tables (ZIP)</button>
+  </div>
+  <div class="print-only filters" id="printFilters"></div>
 
   <div class="controls">
     <div class="ctl">
@@ -94,21 +171,52 @@
 
   <div class="card">
     <h2>Raw reads per BRK barcode</h2>
+    <h3>Barcode plates <span style="font-weight:400;color:var(--muted)" id="plateSub"></span></h3>
+    <p>BRK01&ndash;BRK96 on plate 1 and BRK97&ndash;BRK192 on plate 2, filled column-wise (A1 = BRK01, B1 = BRK02 &hellip; H12 = BRK96). Each well shows the BRK number and its classified reads; it turns green when the sample has at least the minimum classified reads set above, red when it has fewer. Hover a well for details.</p>
+    <div class="legend" id="plateLegend"></div>
+    <canvas id="plates"></canvas>
+    <h3>Reads per barcode</h3>
     <p>Reads assigned by torchlex to each inner barcode, stacked by batch. Diamonds show classified reads in the feature table. Faded bars are samples below the read threshold.</p>
     <div id="rawPlot"></div>
   </div>
-  <div class="card">
+  <div class="card break">
     <h2>Relative abundance, species level</h2>
     <p>Taxa below the abundance threshold in every shown sample are grouped as “Other”. Taxa not resolved to species are shown at their lowest classified rank.</p>
     <div id="barPlot"></div>
+    <div class="print-only plegend" id="barLegendPrint"></div>
   </div>
   <div class="card">
     <h2>Rarefaction curves</h2>
     <p>Expected number of taxa at each sequencing depth, computed analytically without random subsampling. Taxa below the abundance threshold are left out.</p>
     <div id="rarePlot"></div>
   </div>
+  <div class="card methods" id="methods">
+    <h2>Materials and methods</h2>
+    <p>Ready to copy. The wet-lab protocol follows McPhillips et al. (2026); the data-analysis text is written from the settings and tool versions recorded for this run.</p>
+    <div class="cite" id="mCite"></div>
+    <h3>Wet-lab protocol <button class="btn copy no-print" data-copy="mProtocol">Copy</button></h3>
+    <div class="text" id="mProtocol"></div>
+    <h3>Data analysis <button class="btn copy no-print" data-copy="mAnalysis">Copy</button></h3>
+    <div class="text" id="mAnalysis"></div>
+    <h3>References <button class="btn copy no-print" data-copy="mRefs">Copy</button></h3>
+    <div class="text refs" id="mRefs"></div>
+  </div>
+  <div class="card no-print">
+    <h2>Downloads</h2>
+    <p>Tab-separated tables, built in your browser from the data in this report. The filtered table and the sample/well summary use the current thresholds.</p>
+    <div class="dl">
+      <button class="btn primary" data-dl="zip">All feature tables (ZIP)</button>
+      <button class="btn" data-dl="merged">Merged feature table (counts)</button>
+      <button class="btn" data-dl="rel">Relative abundance (%)</button>
+      <button class="btn" data-dl="filtered">Filtered table (current thresholds)</button>
+      <button class="btn" data-dl="summary">Sample / well summary</button>
+    </div>
+    <h3>Per-batch feature tables</h3>
+    <div class="dl" id="batchDl"></div>
+  </div>
 </main>
-<footer>RT-RubyRed · RubyRed pipeline (QIIME 2, torchlex) · Lukasz Krych, University of Copenhagen · report generated <span id="gen"></span></footer>
+<div class="tip" id="tip"></div>
+<footer>RT-RubyRed <span id="ver"></span> · RubyRed pipeline (QIIME 2, torchlex) · Lukasz Krych, University of Copenhagen · report generated <span id="gen"></span></footer>
 
 <script>
 const D = /*__DATA__*/null;
@@ -128,6 +236,7 @@ const colour = {}; order.forEach((i, k) => colour[i] = PALETTE[k % PALETTE.lengt
 
 document.getElementById("runline").textContent = `${D.meta.run} · ${D.meta.dir}`;
 document.getElementById("gen").textContent = D.meta.updated;
+document.getElementById("ver").textContent = D.meta.version ? "v" + D.meta.version : "";
 document.getElementById("paths").innerHTML =
   `Input <code>${esc(D.meta.watch)}</code> &nbsp;·&nbsp; Output <code>${esc(D.meta.out)}</code> &nbsp;·&nbsp; started ${esc(D.meta.started)}`;
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
@@ -197,18 +306,35 @@ function update() {
     `${shownT.length} of ${T.length} taxa shown · ${T.length - shownT.length} grouped as Other`;
   document.getElementById("rdHint").textContent =
     `${sIdx.length} of ${S.length} samples shown`;
+  document.getElementById("printFilters").textContent =
+    `Filters: minimum relative abundance ${thr} % · minimum classified reads per sample ${fmt(minR)} · ` +
+    `${sIdx.length} of ${S.length} samples and ${shownT.length} of ${T.length} taxa shown`;
+  curMinR = minR;
+  drawPlates();
+  const PW = printing ? {width: 700} : {};
 
   // 1. raw reads
   const rawTraces = D.batches.map((b, k) => ({
-    type: "bar", name: b, x: S, y: S.map(s => (D.raw[s] || {})[b] || 0),
+    type: "bar", x: S,
+    // legend: batch name with its classified (annotated) reads in small grey text underneath
+    name: b + (D.batch_classified && b in D.batch_classified
+      ? `<br><span style="font-size:9.5px;color:#6b6b70">${fmt(D.batch_classified[b])} reads</span>` : ""), y: S.map(s => (D.raw[s] || {})[b] || 0),
     marker: {color: `hsl(345, 75%, ${Math.round(28 + 50 * k / Math.max(1, D.batches.length))}%)`,
              opacity: S.map((_, j) => keepS[j] ? 1 : 0.22)},
     hovertemplate: `%{x} · ${b}: %{y:,} reads<extra></extra>`}));
-  rawTraces.push({type: "scatter", mode: "markers", name: "classified", x: S, y: colTot,
+  rawTraces.push({type: "scatter", mode: "markers", x: S, y: colTot,
+    name: `classified<br><span style="font-size:9.5px;color:#6b6b70">${fmt(colTot.reduce((a, b) => a + b, 0))} total</span>`,
     marker: {symbol: "diamond", size: 7, color: "#1d1d1f"},
     hovertemplate: "%{x} classified: %{y:,}<extra></extra>"});
-  Plotly.react("rawPlot", rawTraces, {...baseLayout, height: 380, barmode: "stack",
-    legend: {orientation: "h", y: 1.12}, yaxis: {...baseLayout.yaxis, title: "reads"}}, cfg);
+  // legend above the plot area, with room reserved for as many rows as it needs
+  const rawW = printing ? 700 : (document.getElementById("rawPlot").clientWidth || 1000);
+  const perRowL = Math.max(1, Math.floor((rawW - 60) / 96));
+  const legRows = Math.ceil((D.batches.length + 1) / perRowL);
+  Plotly.react("rawPlot", rawTraces, {...baseLayout, ...PW, height: printing ? 300 : 380 + legRows * 34, barmode: "stack",
+    margin: {...baseLayout.margin, t: printing ? 10 : 12 + legRows * 34},
+    showlegend: !printing,
+    legend: {orientation: "h", x: 0, y: 1, yanchor: "bottom", entrywidth: 96, entrywidthmode: "pixels", font: {size: 11}, valign: "top"},
+    yaxis: {...baseLayout.yaxis, title: "reads"}}, cfg);
 
   // 2. species barplot
   const xs = sIdx.map(j => S[j]);
@@ -219,9 +345,13 @@ function update() {
   if (other.some(v => v > 0))
     bars.push({type: "bar", name: `Other (< ${thr}%)`, x: xs, y: other, marker: {color: OTHER},
       hovertemplate: "Other: %{y:.2f}%<extra></extra>"});
-  Plotly.react("barPlot", bars, {...baseLayout, height: 600, barmode: "stack", bargap: 0.15,
+  // on paper the legend is a compact HTML list under the plot, so no taxon is cut off
+  Plotly.react("barPlot", bars, {...baseLayout, ...PW, barmode: "stack", bargap: 0.15,
+    height: printing ? 470 : 600, showlegend: !printing,
     yaxis: {...baseLayout.yaxis, title: "relative abundance (%)", range: [0, 100]},
     legend: {font: {size: 11}, traceorder: "normal"}}, cfg);
+  document.getElementById("barLegendPrint").innerHTML = bars.map(b =>
+    `<span><i style="background:${b.marker.color}"></i>${esc(b.name)}</span>`).join("");
 
   // 3. rarefaction
   const lines = sIdx.map((j, k) => {
@@ -230,11 +360,347 @@ function update() {
       line: {width: 1.6, color: PALETTE[k % PALETTE.length]},
       hovertemplate: `${S[j]}<br>%{x:,} reads → %{y:.1f} taxa<extra></extra>`};
   });
-  Plotly.react("rarePlot", lines, {...baseLayout, height: 480,
+  Plotly.react("rarePlot", lines, {...baseLayout, ...PW, height: 480,
     margin: {...baseLayout.margin, b: 50},
     xaxis: {title: "reads sampled", gridcolor: "#eee"}, yaxis: {...baseLayout.yaxis, title: "observed taxa"},
-    legend: {font: {size: 11}}}, cfg);
+    showlegend: !printing, legend: {font: {size: 11}}}, cfg);
 }
+// ---- 96-well barcode plates (BRK01-96 plate 1, BRK97-192 plate 2, column-wise)
+let curMinR = 0, printing = false;
+const ROWS = "ABCDEFGH";
+const brkNum = s => { const m = /^BRK0*(\d+)$/i.exec(s); return m ? +m[1] : null; };
+const brkName = n => "BRK" + String(n).padStart(2, "0");
+const sampleOf = {};                                   // BRK number -> sample index
+S.forEach((s, j) => { const n = brkNum(s); if (n) sampleOf[n] = j; });
+const nPlates = Math.max(2, Math.ceil(Math.max(0, ...Object.keys(sampleOf).map(Number)) / 96));
+const wellOf = n => { const k = (n - 1) % 96;
+  return {plate: Math.floor((n - 1) / 96) + 1, row: k % 8, col: Math.floor(k / 8), well: ROWS[k % 8] + (Math.floor(k / 8) + 1)}; };
+const topTaxon = S.map((_, j) => { let b = -1, v = 0;
+  M.forEach((r, i) => { if (r[j] > v) { v = r[j]; b = i; } }); return b; });
+const COL = {ok: "#2f9e55", low: "#d64541", none: "#f2efef"};
+function wellStatus(j) {
+  if (j === undefined) return "none";
+  if (colTot[j] > 0 && colTot[j] >= curMinR) return "ok";
+  return (colTot[j] > 0 || rawTot[j] > 0) ? "low" : "none";
+}
+const short = n => n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "k"
+  : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : String(n);
+const PL = {left: 22, top: 44, cell: 40, gap: 30};
+PL.w = PL.left + 12 * PL.cell + 4; PL.h = PL.top + 8 * PL.cell + 6;
+function drawPlates() {
+  const cv = document.getElementById("plates");
+  const avail = cv.parentElement.clientWidth || 1000;
+  const perRow = (printing || avail >= 2 * PL.w * 0.8) ? 2 : 1;
+  const rowsP = Math.ceil(nPlates / perRow);
+  const W = perRow * PL.w + (perRow - 1) * PL.gap, H = rowsP * PL.h + (rowsP - 1) * 18;
+  const sc = Math.max(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(W * sc); cv.height = Math.round(H * sc);
+  cv.style.maxWidth = Math.round(W * 1.3) + "px";
+  cv._W = W; cv._wells = [];
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(sc, 0, 0, sc, 0, 0); ctx.clearRect(0, 0, W, H);
+  let okAll = 0, usedAll = 0;
+  for (let p = 0; p < nPlates; p++) {
+    const ox = (p % perRow) * (PL.w + PL.gap), oy = Math.floor(p / perRow) * (PL.h + 18);
+    const first = p * 96 + 1, last = first + 95;
+    let ok = 0, used = 0;
+    for (let n = first; n <= last; n++) { const st = wellStatus(sampleOf[n]); if (st === "ok") ok++; if (st !== "none") used++; }
+    okAll += ok; usedAll += used;
+    ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.fillStyle = "#1d1d1f";
+    ctx.font = "bold 13px -apple-system, Segoe UI, Helvetica, Arial, sans-serif";
+    ctx.fillText(`Plate ${p + 1}  (${brkName(first)} – ${brkName(last)})`, ox, oy + 14);
+    ctx.textAlign = "right"; ctx.fillStyle = "#6b6b70"; ctx.font = "12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif";
+    ctx.fillText(`${ok} / ${used} with reads pass`, ox + PL.w, oy + 14);
+    // plate outline
+    ctx.strokeStyle = "#cfc9c9"; ctx.lineWidth = 1.2;
+    roundRect(ctx, ox + PL.left - 5, oy + PL.top - 5, 12 * PL.cell + 10, 8 * PL.cell + 10, 9); ctx.stroke();
+    ctx.fillStyle = "#6b6b70"; ctx.font = "11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif"; ctx.textAlign = "center";
+    for (let c = 0; c < 12; c++) ctx.fillText(String(c + 1), ox + PL.left + c * PL.cell + PL.cell / 2, oy + PL.top - 10);
+    ctx.textBaseline = "middle";
+    for (let r = 0; r < 8; r++) ctx.fillText(ROWS[r], ox + 9, oy + PL.top + r * PL.cell + PL.cell / 2);
+    for (let n = first; n <= last; n++) {
+      const w = wellOf(n), j = sampleOf[n], st = wellStatus(j);
+      const cx = ox + PL.left + w.col * PL.cell + PL.cell / 2, cy = oy + PL.top + w.row * PL.cell + PL.cell / 2, rad = PL.cell * 0.44;
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 2 * Math.PI);
+      ctx.fillStyle = COL[st]; ctx.fill();
+      if (st === "none") { ctx.strokeStyle = "#dcd6d6"; ctx.lineWidth = 1; ctx.stroke(); }
+      ctx.fillStyle = st === "none" ? "#a9a4a4" : "#fff";
+      ctx.font = "bold 10.5px -apple-system, Segoe UI, Helvetica, Arial, sans-serif";
+      ctx.fillText(String(n), cx, st === "none" ? cy : cy - 5);
+      if (st !== "none") {
+        ctx.font = "9px -apple-system, Segoe UI, Helvetica, Arial, sans-serif";
+        ctx.fillText(short(colTot[j]), cx, cy + 7);
+      }
+      cv._wells.push({cx, cy, r: rad, n, w, j, st});
+    }
+  }
+  document.getElementById("plateSub").textContent =
+    `· ${okAll} of ${usedAll} barcodes with reads have ≥ ${fmt(curMinR)} classified reads`;
+  document.getElementById("plateLegend").innerHTML =
+    (curMinR > 0
+      ? `<span><i style="background:${COL.ok}"></i>≥ ${fmt(curMinR)} classified reads</span>` +
+        `<span><i style="background:${COL.low}"></i>below ${fmt(curMinR)} classified reads</span>`
+      : `<span><i style="background:${COL.ok}"></i>classified reads (raise the minimum above to set a cut-off)</span>` +
+        `<span><i style="background:${COL.low}"></i>raw reads but none classified</span>`) +
+    `<span><i style="background:${COL.none};border:1px solid #d6d0d0"></i>no reads</span>`;
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+const tip = document.getElementById("tip");
+document.getElementById("plates").addEventListener("mousemove", e => {
+  const cv = e.currentTarget, rc = cv.getBoundingClientRect(), k = cv._W / rc.width;
+  const x = (e.clientX - rc.left) * k, y = (e.clientY - rc.top) * k;
+  const h = (cv._wells || []).find(o => (x - o.cx) ** 2 + (y - o.cy) ** 2 <= o.r * o.r);
+  if (!h) { tip.style.display = "none"; return; }
+  const j = h.j, name = j === undefined ? brkName(h.n) : S[j];
+  let body = `<b>${esc(name)}</b> · plate ${h.w.plate}, well ${h.w.well}<br>`;
+  if (j === undefined || h.st === "none") body += "no reads";
+  else {
+    body += `${fmt(rawTot[j])} raw reads · ${fmt(colTot[j])} classified<br>` +
+      (h.st === "ok" ? `<span class="ok">passes</span>` : `<span class="low">below</span>`) + ` (minimum ${fmt(curMinR)})`;
+    const t = topTaxon[j];
+    if (t >= 0) body += `<br>top: <i>${esc(T[t])}</i> ${(100 * M[t][j] / colTot[j]).toFixed(1)} %`;
+  }
+  tip.innerHTML = body; tip.style.display = "block";
+  tip.style.left = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8) + "px";
+  tip.style.top = (e.clientY + 14) + "px";
+});
+document.getElementById("plates").addEventListener("mouseleave", () => { tip.style.display = "none"; });
+let rsT = null;
+window.addEventListener("resize", () => { clearTimeout(rsT); rsT = setTimeout(drawPlates, 120); });
+
+// ---- downloads (TSV built in the browser; ZIP = uncompressed "stored" archive)
+const BASE = (D.meta.merged_name || `RT-RubyRed_${D.meta.run}_${D.meta.dir}_feature_table.tsv`).replace(/_feature_table\.tsv$/, "");
+const tsv = rows => rows.map(r => r.join("\t")).join("\n") + "\n";
+const withReads = S.map((_, j) => j).filter(j => colTot[j] > 0);
+function mergedTSV() {
+  return tsv([["#OTU ID", ...withReads.map(j => S[j])], ...M.map((r, i) => [D.lineages[i], ...withReads.map(j => r[j])])]);
+}
+function relTSV() {
+  return tsv([["#OTU ID", "taxon", ...withReads.map(j => S[j])],
+    ...M.map((r, i) => [D.lineages[i], T[i], ...withReads.map(j => (100 * r[j] / colTot[j]).toFixed(4))])]);
+}
+function currentFilters() {
+  const thr = parseFloat(document.getElementById("abN").value) || 0;
+  const minR = parseFloat(document.getElementById("rdN").value) || 0;
+  const sIdx = S.map((_, j) => j).filter(j => colTot[j] > 0 && colTot[j] >= minR);
+  const keepT = M.map(r => sIdx.some(j => 100 * r[j] / colTot[j] >= thr));
+  return {thr, minR, sIdx, keepT};
+}
+function filteredTSV() {
+  const {thr, sIdx, keepT} = currentFilters();
+  const rows = [["#OTU ID", "taxon", ...sIdx.map(j => S[j])]];
+  order.filter(i => keepT[i]).forEach(i => rows.push([D.lineages[i], T[i], ...sIdx.map(j => M[i][j])]));
+  rows.push([`Other (< ${thr}% in every sample)`, "Other", ...sIdx.map(j => M.reduce((a, r, i) => keepT[i] ? a : a + r[j], 0))]);
+  return tsv(rows);
+}
+function summaryTSV() {
+  const rows = [["sample", "plate", "well", "raw_reads", "classified_reads", `status_min_${curMinR}_reads`, "top_taxon", "top_taxon_pct"]];
+  const seen = new Set();
+  const add = (n, j) => {
+    const w = n ? wellOf(n) : null, st = wellStatus(j), t = j === undefined ? -1 : topTaxon[j];
+    rows.push([j === undefined ? brkName(n) : S[j], w ? w.plate : "", w ? w.well : "",
+      j === undefined ? 0 : rawTot[j], j === undefined ? 0 : colTot[j],
+      st === "ok" ? "pass" : st === "low" ? "below" : "no_reads",
+      t >= 0 ? T[t] : "", t >= 0 ? (100 * M[t][j] / colTot[j]).toFixed(2) : ""]);
+    if (j !== undefined) seen.add(j);
+  };
+  for (let n = 1; n <= nPlates * 96; n++) add(n, sampleOf[n]);
+  S.forEach((_, j) => { if (!seen.has(j)) add(null, j); });
+  return tsv(rows);
+}
+const CRC = (() => { const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+  return t; })();
+function crc32(u) { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function zipBlob(files) {
+  const enc = new TextEncoder(), parts = [], central = []; let off = 0, cdSize = 0;
+  const d = new Date();
+  const dosD = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  const dosT = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+  for (const f of files) {
+    const name = enc.encode(f.name), data = enc.encode(f.text), crc = crc32(data);
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true);
+    h.setUint16(10, dosT, true); h.setUint16(12, dosD, true); h.setUint32(14, crc, true);
+    h.setUint32(18, data.length, true); h.setUint32(22, data.length, true); h.setUint16(26, name.length, true);
+    parts.push(h.buffer, name, data);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+    c.setUint16(12, dosT, true); c.setUint16(14, dosD, true); c.setUint32(16, crc, true);
+    c.setUint32(20, data.length, true); c.setUint32(24, data.length, true); c.setUint16(28, name.length, true);
+    c.setUint32(42, off, true);
+    central.push(c.buffer, name);
+    off += 30 + name.length + data.length; cdSize += 46 + name.length;
+  }
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true);
+  e.setUint32(12, cdSize, true); e.setUint32(16, off, true);
+  return new Blob([...parts, ...central, e.buffer], {type: "application/zip"});
+}
+function save(blob, name) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+const txt = s => new Blob([s], {type: "text/tab-separated-values"});
+function filteredName() { const f = currentFilters(); return `${BASE}_feature_table_filtered_ab${f.thr}pct_min${f.minR}reads.tsv`; }
+const DL = {
+  merged: () => save(txt(mergedTSV()), `${BASE}_feature_table.tsv`),
+  rel: () => save(txt(relTSV()), `${BASE}_relative_abundance.tsv`),
+  filtered: () => save(txt(filteredTSV()), filteredName()),
+  summary: () => save(txt(summaryTSV()), `${BASE}_sample_well_summary.tsv`),
+  zip: () => {
+    const files = [
+      {name: `${BASE}_feature_table.tsv`, text: mergedTSV()},
+      {name: `${BASE}_relative_abundance.tsv`, text: relTSV()},
+      {name: filteredName(), text: filteredTSV()},
+      {name: `${BASE}_sample_well_summary.tsv`, text: summaryTSV()},
+      ...Object.entries(D.tables || {}).map(([n, t]) => ({name: `feature_tables/${n}`, text: t}))];
+    save(zipBlob(files), `${BASE}_feature_tables.zip`);
+  }};
+document.querySelectorAll("[data-dl]").forEach(b => b.addEventListener("click", () => DL[b.dataset.dl]()));
+const bt = Object.keys(D.tables || {});
+document.getElementById("batchDl").innerHTML = bt.length
+  ? bt.map(n => `<button class="btn" data-bt="${esc(n)}">${esc(n.replace(/^feature_table_|\.tsv$/g, ""))}</button>`).join("")
+  : `<span style="color:var(--muted);font-size:12.5px">not embedded in this report</span>`;
+document.querySelectorAll("[data-bt]").forEach(b => b.addEventListener("click", () => save(txt(D.tables[b.dataset.bt]), b.dataset.bt)));
+
+// ---- read fate: raw (torchlex-assigned) reads -> classified / removed by each RubyRed step
+(function () {
+  const raw = D.meta.raw_total || 0, cls = colTot.reduce((a, b) => a + b, 0);
+  const unassignedRows = T.map((t, i) => i).filter(i => /^Unassigned/i.test(T[i]));
+  const unassigned = unassignedRows.reduce((a, i) => a + M[i].reduce((x, y) => x + y, 0), 0);
+  const F = D.fate || {};
+  const steps = [
+    ["primer_length", "Removed: no primers / wrong amplicon length (cutadapt)", "#55627f"],
+    ["quality", "Removed: low quality (chopper)", "#8494b4"],
+    ["subsampling", "Removed: subsampling / samples with too few reads", "#b9b2aa"],
+    ["chimera", "Removed: chimeras (vsearch uchime-ref)", "#d99a3d"],
+    ["unmatched", "Removed: not matched to reference when orienting (RESCRIPt)", "#9b9b9f"]];
+  const segs = [["Classified (in feature table)", cls - unassigned, "#b0123b"]];
+  if (unassigned) segs.push(["In table but unassigned", unassigned, "#e58aa2"]);
+  steps.forEach(([k, lab, c]) => { if (F[k]) segs.push([lab, F[k], c]); });
+  Object.keys(F).filter(k => !steps.some(s => s[0] === k)).forEach(k => segs.push(["Removed: " + k, F[k], "#c9c3c3"]));
+  if (D.failed_raw) segs.push(["Not processed (RubyRed failed for the batch)", D.failed_raw, "#6b6b70"]);
+  const accounted = segs.reduce((a, s) => a + s[1], 0);
+  const rest = raw - accounted;
+  if (rest > 0) segs.push([Object.keys(F).length ? "Other / not accounted for" : "Not classified (removed by RubyRed filters)", rest, "#d9d4d4"]);
+  const tot = Math.max(raw, accounted) || 1, pct = v => 100 * v / tot;
+  document.getElementById("fatePct").textContent = (raw ? (100 * cls / raw).toFixed(1) : "0") + " % classified";
+  document.getElementById("fateHead").innerHTML =
+    `<b>${fmt(cls)}</b> classified of <b>${fmt(raw)}</b> raw reads assigned to a BRK barcode, across ${D.batches.length} batch${D.batches.length === 1 ? "" : "es"}`;
+  document.getElementById("fateMax").textContent = fmt(tot) + " reads";
+  document.getElementById("fateBar").innerHTML = segs.filter(s => s[1] > 0).map(([lab, v, c]) =>
+    `<div style="width:${pct(v)}%;background:${c};${c === "#d9d4d4" || c === "#b9b2aa" ? "color:#333" : ""}" title="${esc(lab)}: ${fmt(v)} reads (${pct(v).toFixed(1)} %)">${pct(v) >= 7 ? pct(v).toFixed(1) + " %" : ""}</div>`).join("");
+  document.getElementById("fateLeg").innerHTML = segs.filter(s => s[1] > 0).map(([lab, v, c]) =>
+    `<div><i style="background:${c}"></i><span>${esc(lab)}</span><span class="n">${fmt(v)} · ${pct(v).toFixed(1)} %</span></div>`).join("");
+  document.getElementById("fateNote").textContent = Object.keys(F).length
+    ? "Raw reads = reads torchlex assigned to an inner BRK barcode. Removed reads are summed from RubyRed's log of every batch."
+    : "Raw reads = reads torchlex assigned to an inner BRK barcode. The per-step breakdown is not available for this run (batch logs not found).";
+})();
+
+// ---- Materials and methods (copy-ready). Update CITE_PROTOCOL when the paper is published.
+const CITE_PROTOCOL = {
+  short: "McPhillips et al., 2026",
+  full: "McPhillips, C. H., Reilly, E. T., Stolberg-Mathieu, G., Nielsen, K., Gottlieb, A. D., Madjarov, G., Roager, H. M., Nielsen, D. S., & Krych, L. (2026). Ultra-high multiplexing enables near-full-length 16S rRNA gene amplicon sequencing of over 1,200 gut microbiome samples on a single nanopore flow cell. bioRxiv (preprint). https://doi.org/10.64898/2026.08.29.747698",
+  url: "https://doi.org/10.64898/2026.08.29.747698"};
+const REPO = "https://github.com/krychu84/RT-RubyRed";
+const REFS = [
+  CITE_PROTOCOL.full,
+  "Bokulich, N. A., Kaehler, B. D., Rideout, J. R., et al. (2018). Optimizing taxonomic classification of marker-gene amplicon sequences with QIIME 2's q2-feature-classifier plugin. Microbiome, 6, 90. https://doi.org/10.1186/s40168-018-0470-z",
+  "Bolyen, E., Rideout, J. R., Dillon, M. R., et al. (2019). Reproducible, interactive, scalable and extensible microbiome data science using QIIME 2. Nature Biotechnology, 37(8), 852–857. https://doi.org/10.1038/s41587-019-0209-9",
+  "Cabezas, M. P., Fonseca, N. A., & Muñoz-Mérida, A. (2024). MIMt: a curated 16S rRNA reference database with less redundancy and higher accuracy at species-level identification. Environmental Microbiome, 19(1), 88. https://doi.org/10.1186/s40793-024-00634-w",
+  "De Coster, W., & Rademakers, R. (2023). NanoPack2: population-scale evaluation of long-read sequencing data. Bioinformatics, 39(5), btad311. https://doi.org/10.1093/bioinformatics/btad311",
+  "Hui, Y., Tamez-Hidalgo, P., Cieplak, T., Satessa, G. D., Kot, W., Kjærulff, S., Nielsen, M. O., Nielsen, D. S., & Krych, L. (2021). Supplementation of a lacto-fermented rapeseed-seaweed blend promotes gut microbial- and gut immune-modulation in weaner piglets. Journal of Animal Science and Biotechnology, 12(1), 85. https://doi.org/10.1186/s40104-021-00601-2",
+  "Martin, M. (2011). Cutadapt removes adapter sequences from high-throughput sequencing reads. EMBnet.journal, 17(1), 10–12. https://doi.org/10.14806/ej.17.1.200",
+  "Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). Scikit-learn: machine learning in Python. Journal of Machine Learning Research, 12, 2825–2830.",
+  "Robeson, M. S., O'Rourke, D. R., Kaehler, B. D., et al. (2021). RESCRIPt: reproducible sequence taxonomy reference database management. PLoS Computational Biology, 17(11), e1009581. https://doi.org/10.1371/journal.pcbi.1009581",
+  "Reilly, E. T., & Krych, Ł. RubyRed: a pipeline for read-by-read analysis of ONT-generated amplicon sequencing data [software]. https://github.com/reillyeo/RubyRed",
+  "Rognes, T., Flouri, T., Nichols, B., Quince, C., & Mahé, F. (2016). VSEARCH: a versatile open source tool for metagenomics. PeerJ, 4, e2584. https://doi.org/10.7717/peerj.2584",
+  "Schack, A. K., Garrido-Navas, M. C., Galevski, D., Madjarov, G., & Krych, L. (2024). SCAN: a nanopore-based, cost effective decision-supporting tool for mass screening of aneuploidies. Human Genomics, 18(1), 131. https://doi.org/10.1186/s40246-024-00690-w",
+  "Shen, W., Sipos, B., & Zhao, L. (2024). SeqKit2: a Swiss army knife for sequence and alignment processing. iMeta, 3(3), e191. https://doi.org/10.1002/imt2.191",
+  `Krych, L. (2026). RT-RubyRed: real-time rRNA amplicon classification for Oxford Nanopore sequencing runs (v${D.meta.version || "1.1.0"}). ${REPO}`];
+
+function buildMethods() {
+  const P = D.pipeline || {}, R = P.rubyred || {}, V = P.versions || {}, Q = D.sequencing || {};
+  const v = (k, pre = " v") => V[k] ? pre + V[k] : "";
+  const rec = !!P.rubyred;
+  document.getElementById("mCite").innerHTML =
+    `Wet-lab protocol: <b>${esc(CITE_PROTOCOL.short)}</b> — ${esc(CITE_PROTOCOL.full.replace(/ https:\/\/doi.*$/, ""))} <a href="${CITE_PROTOCOL.url}" target="_blank" rel="noopener">${esc(CITE_PROTOCOL.url)}</a>. Pipeline: RubyRed <a href="https://github.com/reillyeo/RubyRed" target="_blank" rel="noopener">github.com/reillyeo/RubyRed</a>; real-time analysis and report: RT-RubyRed <a href="${REPO}" target="_blank" rel="noopener">${REPO.replace("https://", "")}</a>`;
+
+  // wet lab
+  const tail = "GTCTCGTGGGCTCGG", umi = "NNNNNNNNNNNNNNN";
+  const primers = [["27Fa", "AGAGTTTGATYMTGGCTYAG"], ["27Fb", "AGGGTTCGATTCTGGCTCAG"],
+    ["338Fa", "ACWCCTACGGGWGGCAGCAG"], ["338Fb", "GACTCCTACGGGAGGCWGCAG"],
+    ["1391R", "GACGGGCGGTGTGTRCA"], ["1540R", "TACGGYTACCTTGTTACGACT"]];
+  const C = esc(CITE_PROTOCOL.short).replace(/,? (\d{4})$/, " ($1)");   // "McPhillips et al. (2026)"
+  document.getElementById("mProtocol").innerHTML = `
+<h4>DNA extraction</h4>
+<p>Faecal samples were homogenised 1:1 with Milli-Q water, aliquoted and stored at −70 °C until analysis. Homogenates were thawed on ice and vortexed briefly, and at least 300–350 mg of homogenate was centrifuged at 12,000 rpm for 5 min. The supernatant was removed, and 125 mg of the pellet was transferred together with 20 µL ZymoBIOMICS Spike-in Control I (containing <i>Imtechella halotolerans</i> and <i>Allobacillus halotolerans</i>) to a PowerBead Pro tube. DNA was extracted following the QIAGEN protocol, with bead-beating on a FastPrep-24 (MP Biomedicals) for 60 s at 4.5–6.5 m/s. DNA concentration was measured with the Qubit dsDNA HS Assay Kit (Thermo Fisher Scientific), and samples were diluted in Milli-Q water to 5 ng/µL in 96-well plates.</p>
+<h4>16S rRNA gene amplicon library preparation</h4>
+<p>Near-full-length 16S rRNA gene amplicons were generated and barcoded with a two-step PCR (Hui et al., 2021) as described by ${C}. The first PCR was performed in a total volume of 25 µL containing 5 µL template DNA (5 ng/µL), 12 µL 2× PCRBIO Ultra Mix (PCR Biosystems) and 2 µL primer mix (5 µM; UMI_27Fa/b, UMI_338Fa/b, UMI_1391R and UMI_1540R; Table 1). Amplification was carried out on a SureCycler 8800 thermocycler (Agilent) at 95 °C for 5 min, followed by 2 cycles of 95 °C for 20 s, 48 °C for 30 s, 65 °C for 10 s and 72 °C for 45 s, and a final extension at 72 °C for 4 min. PCR products were purified with AMPure XP beads (Beckman Coulter) on an automated liquid-handling system according to the manufacturer's instructions.</p>
+<p>In the second PCR, 11 µL of purified product was transferred directly from the magnetic plate to a new 96-well plate and mixed with 12 µL 2× PCRBIO Ultra Mix and 2 µL barcoded primers (ONT UMI16S SET1), giving each sample a unique inner barcode (BRK01–BRK192; two 96-well plates per pool). Amplification was performed at 95 °C for 2 min, followed by 33 cycles of 95 °C for 20 s, 55 °C for 20 s and 72 °C for 40 s, and a final extension at 72 °C for 4 min. PCR products were checked by agarose gel electrophoresis (8 µL product with 2 µL 6× loading dye on a 1.5% agarose gel in 0.5× TBE, 45 min at 120 V, ethidium bromide staining) and quantified with the Qubit 1X dsDNA HS Assay Kit (Thermo Fisher Scientific).</p>
+<h4>Pooling, native barcoding and sequencing</h4>
+<p>Barcoded amplicons from each PCR plate were pooled in equimolar amounts (approximately 3 ng per sample), and each pool was purified with AMPure XP beads (Beckman Coulter) and native-barcoded with the Native Barcoding Kit 24 V14 (SQK-NBD114.24; Oxford Nanopore Technologies) according to the manufacturer's protocol. The native-barcoded pools were combined into a single library and sequenced on an R10.4.1 flow cell (Oxford Nanopore Technologies). Basecalling was performed in real time with Dorado in super-accurate mode, and reads were demultiplexed by native barcode in MinKNOW.</p>
+<p><b>Table 1.</b> Primers used in the first PCR (Hui et al., 2021; ${esc(CITE_PROTOCOL.short)}). Each primer carries an adapter tail (${tail}) and a 15-nt unique molecular identifier (N<sub>15</sub>) upstream of the 16S rRNA gene-specific sequence.</p>
+<table><tr><th>Primer</th><th>Sequence (5′→3′)</th></tr>
+${primers.map(([n, sq]) => `<tr><td>UMI_${n}</td><td><code>${tail}${umi}${sq}</code></td></tr>`).join("")}
+</table>`;
+
+  // data analysis (run-specific)
+  const seqBits = [];
+  if (Q.device) seqBits.push(`on a ${esc(Q.device.replace(/_/g, " "))}${Q.device_id ? " (" + esc(Q.device_id) + ")" : ""}`);
+  if (Q.flow_cell || Q.flow_cell_id) seqBits.push(`flow cell ${esc([Q.flow_cell, Q.flow_cell_id].filter(Boolean).join(", "))}`);
+  const sw = [Q.minknow ? "MinKNOW v" + Q.minknow : "MinKNOW", Q.dorado ? "Dorado v" + Q.dorado : "Dorado"].join(" with ");
+  const trim = R.primer_trim
+    ? `primer-bounded amplicons were extracted with cutadapt${v("cutadapt")} (Martin, 2011) using a linked adapter (forward ${esc(R.fwd_primer || "")}, reverse ${esc(R.rev_primer || "")} as found at the 3′ end of reads; maximum error rate ${esc(R.primer_err || "")}; reverse-complemented reads re-oriented; untrimmed reads discarded) and amplicons of ${esc(R.len_min)}–${esc(R.len_max)} bp were kept; `
+    : `primer binding regions were trimmed with cutadapt${v("cutadapt")} (Martin, 2011) and reads of ${esc(R.len_min || "800")}–${esc(R.len_max || "1600")} bp were kept; `;
+  const sub = R.subsample && +R.subsample < 1e8 ? `samples with more than ${fmt(+R.subsample)} reads per batch were subsampled with SeqKit${v("seqkit")} (Shen et al., 2024)` : "no subsampling was applied (all reads used)";
+  const nS = withReads.length, nT = T.length;
+  const paras = [
+    `Sequencing was performed ${seqBits.join(", ") || "on an Oxford Nanopore device"}${Q.kits ? " with " + esc(Q.kits) : ""}. Basecalling was done in real time in ${sw}${Q.model ? " using the super-accurate model " + esc(Q.model) : " in super-accurate mode"}${Q.min_qscore !== undefined ? " (minimum read Q-score " + esc(Q.min_qscore) + ")" : ""}, and reads were demultiplexed by native barcode in MinKNOW.`,
+    `Reads of native barcode ${esc(D.meta.dir)} (run ${esc(D.meta.run)}) were analysed in real time with RT-RubyRed v${esc(D.meta.version || "")} (${REPO}), which processed the FASTQ files written by MinKNOW in ${D.batches.length} batches. Each batch was demultiplexed into inner barcodes (BRK01–BRK192) with torchlex${v("torchlex")} (Schack et al., 2024; minimum read quality 0, read length 1–10,000 bp) and processed with RubyRed${R.commit ? " (commit " + esc(R.commit) + (R.commit_date ? ", " + esc(R.commit_date) : "") + ")" : ""} (Reilly & Krych, https://github.com/reillyeo/RubyRed; ${esc(CITE_PROTOCOL.short)}): ${trim}reads with a mean quality below Q${esc(R.quality || "15")} were removed with chopper${v("chopper")} (De Coster & Rademakers, 2023); reads were converted to FASTA and relabelled with VSEARCH${v("vsearch")} (Rognes et al., 2016); ${sub}.`,
+    `Sequences were imported into QIIME 2${v("qiime2")} (Bolyen et al., 2019). Chimeras were removed by reference-based detection with q2-vsearch uchime-ref${v("q2_vsearch")}, and reads were oriented against the reference with RESCRIPt orient-seqs${v("rescript")} (Robeson et al., 2021). Every read was then classified individually with a naive Bayes classifier (q2-feature-classifier classify-sklearn${v("q2_feature_classifier")}; Bokulich et al., 2018; scikit-learn${v("scikit_learn")}; Pedregosa et al., 2011; confidence threshold ${esc(R.confidence || "0.9")}) ${/amp341F1390R/.test(P.classifier || "")
+      ? `trained on the 341F–1390R amplicon region of the species-level curated MIMt 16S rRNA database (release M2c_25_10; Cabezas et al., 2024) distributed with RubyRed (classifier ${esc(P.classifier)})`
+      : `trained on the species-level curated MIMt 16S rRNA database (Cabezas et al., 2024) distributed with RubyRed (classifier ${esc(P.classifier || "RubyRed default")})`}. The reference sequences of the same database were used for chimera detection and orientation.`,
+    `Per-batch feature tables (read counts per taxon and sample) were summed into one run-level feature table (${fmt(nT)} taxa × ${fmt(nS)} samples, ${fmt(colTot.reduce((a, b) => a + b, 0))} classified reads); no abundance filtering was applied to the table (RubyRed minimum frequency 1). Of ${fmt(D.meta.raw_total || 0)} reads assigned to a BRK barcode, ${D.meta.raw_total ? (100 * colTot.reduce((a, b) => a + b, 0) / D.meta.raw_total).toFixed(1) : "0"} % were classified. The software is available at ${REPO}.`];
+  if (!rec) paras.push("Note: tool versions and RubyRed settings were not recorded for this run (report made by an older RT-RubyRed); defaults described in the protocol paper are shown.");
+  document.getElementById("mAnalysis").innerHTML = paras.map(t => `<p>${t}</p>`).join("");
+  document.getElementById("mRefs").innerHTML = REFS.map(r => `<p>${esc(r)}</p>`).join("");
+}
+buildMethods();
+function plainText(el) {
+  const c = el.cloneNode(true);
+  c.querySelectorAll("li").forEach((li, k) => { li.textContent = (Array.from(li.parentNode.children).indexOf(li) + 1) + ". " + li.textContent; });
+  c.querySelectorAll("tr").forEach(tr => { tr.textContent = Array.from(tr.children).map(x => x.textContent).join("\t"); });
+  c.querySelectorAll("p,h4,li,tr").forEach(x => x.insertAdjacentText("afterend", "\n"));
+  c.querySelectorAll("h4").forEach(x => x.insertAdjacentText("beforebegin", "\n"));
+  return c.textContent.replace(/[ \t]*\n[ \t]*\n[ \t]*\n+/g, "\n\n").replace(/^\s+|\s+$/g, "") + "\n";
+}
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch (e) {
+    const ta = document.createElement("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
+    ta.remove(); return ok;
+  }
+}
+document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const ok = await copyText(plainText(document.getElementById(b.dataset.copy)));
+  b.textContent = ok ? "Copied" : "Copy failed"; b.classList.toggle("done", ok);
+  setTimeout(() => { b.textContent = "Copy"; b.classList.remove("done"); }, 1600);
+}));
+
+// ---- A4 printing: fixed chart width, both plates side by side
+function setPrint(on) { if (printing === on) return; printing = on; update(); }
+window.addEventListener("beforeprint", () => setPrint(true));
+window.addEventListener("afterprint", () => setPrint(false));
+const printMQ = window.matchMedia("print");
+if (printMQ.addEventListener) printMQ.addEventListener("change", e => setPrint(e.matches));
+document.getElementById("printBtn").addEventListener("click", () => { setPrint(true); setTimeout(() => window.print(), 60); });
+if (printMQ.matches) printing = true;
 update();
 </script>
 </body>

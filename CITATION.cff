@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use RT-RubyRed, please cite it as below, together with RubyRed, QIIME 2 and the MIMt database."
+message: "If you use RT-RubyRed, please cite it as below, together with RubyRed (reillyeo/RubyRed) and the protocol paper listed under references."
 title: "RT-RubyRed: real-time rRNA amplicon classification for Oxford Nanopore sequencing runs"
-version: 1.0.0
-date-released: 2026-09-25
+version: 1.1.0
+date-released: 2026-11-18
 license: MIT
 repository-code: "https://github.com/krychu84/RT-RubyRed"
 authors:
@@ -10,3 +10,40 @@ authors:
     given-names: Lukasz
     email: krych@life.ku.dk
     affiliation: "Department of Food Science, University of Copenhagen"
+references:
+  - type: software
+    title: RubyRed
+    abstract: "Custom bioinformatics pipeline for read-by-read analysis of ONT-generated amplicon sequencing data"
+    repository-code: "https://github.com/reillyeo/RubyRed"
+    authors:
+      - family-names: Reilly
+        given-names: Eoghan
+        affiliation: University of Copenhagen
+      - family-names: Krych
+        given-names: Łukasz
+        affiliation: University of Copenhagen
+  - type: article
+    title: "Ultra-high multiplexing enables near-full-length 16S rRNA gene amplicon sequencing of over 1,200 gut microbiome samples on a single nanopore flow cell"
+    journal: bioRxiv
+    year: 2026
+    doi: 10.64898/2026.08.29.747698
+    notes: "Preprint; to be updated when published."
+    authors:
+      - family-names: McPhillips
+        given-names: Charlie Hejlskov
+      - family-names: Reilly
+        given-names: Eoghan Thomas
+      - family-names: Stolberg-Mathieu
+        given-names: Gladys
+      - family-names: Nielsen
+        given-names: Klara
+      - family-names: Gottlieb
+        given-names: Adam Duun
+      - family-names: Madjarov
+        given-names: Gjorgji
+      - family-names: Roager
+        given-names: Henrik M.
+      - family-names: Nielsen
+        given-names: Dennis Sandris
+      - family-names: Krych
+        given-names: Lukasz

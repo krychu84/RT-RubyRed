@@ -1,5 +1,7 @@
 # MIMt 16S species-level classifier
 
+> **Now part of RubyRed.** The curated species-level taxonomy made by this script is what RubyRed's own database is built on: RubyRed ships `MIMt_16s_311025_species_amp341F1390R` (this taxonomy, retrained on the 341F–1390R amplicon) in `resources/classifiers/`, and RT-RubyRed uses it by default. You only need this script to rebuild the full-length variant or to add your own species merges.
+
 `make_species_classifier.py` turns RubyRed's MIMt 16S sklearn classifier (`MIMt_16s_311025`) into a cleaned, species-level classifier (`MIMt_16s_311025_species`) **without retraining**. It takes about 1 minute and needs about 9 GB of RAM.
 
 ```bash
