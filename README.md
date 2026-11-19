@@ -35,7 +35,7 @@ RT-RubyRed runs the [RubyRed](https://github.com/reillyeo/RubyRed) pipeline *whi
 - **Batch processing:** new files → [torchlex](https://nanoporetech.com/resource-centre/torchlex-method-real-time-demultiplexing-barcoded-oxford-nanopore-reads) demultiplexing on the inner barcodes (`BRK01`–`BRK192`) → RubyRed classification → one feature table per batch.
 - **Merged feature table** of all batches, updated after every batch.
 - **Interactive HTML report** in a single offline file:
-  - raw vs classified reads for the whole run, with the reads removed at each RubyRed step
+  - raw vs classified reads for the whole run in the page header, with the reads removed at each RubyRed step
   - two 96-well barcode plates (BRK01–BRK192) coloured by the read threshold, and raw reads per barcode
   - species-level relative abundance
   - rarefaction curves
@@ -203,7 +203,7 @@ A single self-contained HTML file (plotly.js is embedded, so it works offline). 
 All plots update when either slider moves, and every plot can be downloaded as SVG.
 
 - **Downloads** (built in the browser, no server needed): *Download all feature tables (ZIP)* holds the merged feature table (counts), relative abundance (%), a table filtered with the current thresholds, a sample/well summary (plate, well, raw and classified reads, pass/below, top taxon) and every per-batch table (`feature_tables/feature_table_batchNN.tsv`). Each table can also be downloaded on its own.
-- **Print report (A4):** prints or saves a PDF on A4 portrait, with the current thresholds written at the top, both plates side by side and the species legend printed under the barchart.
+- **Print panel / Print full report (A4):** each panel has its own *Print panel* button that prints only that panel (with the header and the current thresholds); *Print full report* sits at the bottom with the downloads. Both print A4 portrait, with both plates side by side and the species legend printed under the barchart.
 
 ## Species-level classifier (database)
 

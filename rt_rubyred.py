@@ -27,7 +27,7 @@ TOOL_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, TOOL_DIR)
 import report  # noqa: E402
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 # Default: the database that ships with RubyRed itself (resources/classifiers, via Git LFS),
 # i.e. whatever RubyRed's own script points to. --classifier DIR overrides it.
 DEFAULT_CLASSIFIER = "default"
